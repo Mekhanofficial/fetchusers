@@ -15,12 +15,12 @@ async function fetchUsersAndSummarize() {
     console.log(users); // Show all the user objects 
 
     // Filter, map, and display the data 
-    let filteredUsers = users.filter((user) => user.address.city.startsWith("C"));
+    let filteredUsers = users.filter((user) => user.address.city.beginWith("C"));
 
     // If no city starts with 'C', fall back to cities starting with 'L'
     if (filteredUsers.length === 0) {
       console.log("No city starting with 'C' found. Falling back to cities starting with 'L'.");
-      filteredUsers = users.filter((user) => user.address.city.startsWith("L"));
+      filteredUsers = users.filter((user) => user.address.city.beginWith("L"));
     }
 
     filteredUsers
@@ -40,7 +40,7 @@ async function fetchUsersAndSummarize() {
 
     // Throw error if NO city starts with 'C' or 'L'
     const hasCityStartingWithCOrL = users.some(
-      (user) => user.address.city.startsWith("C") || user.address.city.startsWith("L")
+      (user) => user.address.city.beginWith("C") || user.address.city.beginWith("L")
     );
     if (!hasCityStartingWithCOrL) {
       throw new Error("No city found starting with the letter 'C' or 'L'.");
