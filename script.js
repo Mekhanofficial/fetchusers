@@ -1,7 +1,3 @@
-// Assignment: Fetch and process user data from an API
-// Endpoint: https://jsonplaceholder.typicode.com/users
-
-// Create an asynchronous function
 async function fetchUsersAndSummarize() {
   try {
     // Use fetch() to get data from the API
@@ -19,10 +15,15 @@ async function fetchUsersAndSummarize() {
     console.log(users); // Show all the user objects 
 
     // Filter, map, and display the data 
-    users
-      // .filter() keeps only users whose city name starts with "C"
-      .filter((user) => user.address.city.startsWith("C"))
+    let filteredUsers = users.filter((user) => user.address.city.startsWith("C"));
 
+    // If no city starts with 'C', fall back to cities starting with 'L'
+    if (filteredUsers.length === 0) {
+      console.log("No city starting with 'C' found. Falling back to cities starting with 'L'.");
+      filteredUsers = users.filter((user) => user.address.city.startsWith("L"));
+    }
+
+    filteredUsers
       // .map() makes a smaller object with only the data we want
       .map((user) => {
         return {
@@ -37,10 +38,12 @@ async function fetchUsersAndSummarize() {
         console.log(`User ID ${user.id}: ${user.name} works at ${user.companyName}`);
       });
 
-    // Throw error if NO city starts with 'C'
-    const hasCityStartingWithC = users.some((user) => user.address.city.startsWith("C"));
-    if (!hasCityStartingWithC) {
-      throw new Error("No city found starting with the letter 'C'.");
+    // Throw error if NO city starts with 'C' or 'L'
+    const hasCityStartingWithCOrL = users.some(
+      (user) => user.address.city.startsWith("C") || user.address.city.startsWith("L")
+    );
+    if (!hasCityStartingWithCOrL) {
+      throw new Error("No city found starting with the letter 'C' or 'L'.");
     }
 
   } catch (error) {
@@ -66,7 +69,7 @@ async function testError() {
   }
 }
 
-// Run 
+// Run functions in order
 async function runTestsInOrder() {
   await fetchUsersAndSummarize(); // success first
   await testError();              // error second
